@@ -104,6 +104,7 @@
     <Compile Include="encryptDialog.xaml.cs">
       <DependentUpon>encryptDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="fileDetails.cs" />
     <Compile Include="fileSelectDialog.xaml.cs">
       <DependentUpon>fileSelectDialog.xaml</DependentUpon>
     </Compile>
