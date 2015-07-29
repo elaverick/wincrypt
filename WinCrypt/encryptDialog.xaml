@@ -1,0 +1,48 @@
+﻿<Window x:Class="WinCrypt.encryptDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Encrypt File(s)" Height="250" Width="300" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="66"/>
+            <RowDefinition/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="64"/>
+            </Grid.ColumnDefinitions>
+            <Label Margin="8,0">Vault File:</Label>
+            <TextBox Grid.Row="1" Name="filenameTextBox" Height="26" Margin="10,0" />
+            <Button Name="fileLocationButton" Grid.Row="1" Grid.Column="1" Width="56" Height="26" ToolTip="Set Location of Vault File" Click="fileLocationButton_Click">...</Button>
+        </Grid>
+        <GroupBox Header="Initialization vector" Grid.Row="1">
+            <Grid Margin="5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox Name="separateIV" Grid.Row="0" Grid.ColumnSpan="2">Create separate IV file</CheckBox>
+                <CheckBox Name="internetIV" Grid.Row="1" Grid.ColumnSpan="2">Use internet source</CheckBox>
+                <TextBox Grid.Row="2" Name="ivFilenameTextBox" IsEnabled="{Binding ElementName=separateIV,Path=IsChecked}"/>
+                <Button Name="ivFileLocationButton" Grid.Row="2" Grid.Column="1" Width="40" ToolTip="Set Location of IV File" IsEnabled="{Binding ElementName=separateIV,Path=IsChecked}" Click="ivFileLocationButton_Click">...</Button>
+            </Grid>
+        </GroupBox>
+        <Border Grid.Row="2" Margin="0,4,0,0" Background="WhiteSmoke">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Name="OKButton" Margin="5,10" Width="64" Click="OKButton_Click">Encrypt</Button>
+                <Button Name="CancelButton" Margin="5,10" Width="64" Click="CancelButton_Click">Cancel</Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

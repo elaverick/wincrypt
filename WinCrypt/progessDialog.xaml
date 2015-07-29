@@ -1,0 +1,27 @@
+﻿<Window x:Class="WinCrypt.progessDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:WinCrypt="clr-namespace:WinCrypt"
+        Title="Progess" Height="120" Width="300" ResizeMode="NoResize">
+    <Window.Resources>
+        <WinCrypt:progessConverter x:Key="progressConverter"/>
+    </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding ElementName=cryptProgressPB,Path=Value,Converter={StaticResource progressConverter} }"/>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar Name="cryptProgressPB" Minimum="0" Maximum="100" Height="24" Margin="8,0,0,0" IsIndeterminate="True" />
+            <TextBlock Name="cryptProgessText" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" Width="25" Margin="5">0%</TextBlock>
+        </Grid>
+        <Button Name="Cancel" Grid.Row="1" Width="72" Height="28" HorizontalAlignment="Right" Margin="8,0" Click="Cancel_Click">Cancel</Button>
+    </Grid>
+</Window>

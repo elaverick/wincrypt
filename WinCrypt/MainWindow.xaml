@@ -1,0 +1,165 @@
+﻿<Window x:Class="WinCrypt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
+        Title="WinCrypt" Height="350" Width="525" VerticalAlignment="Bottom" Icon="/WinCrypt;component/WinCrypt.ico">
+    <Window.Resources>
+        <Style TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.25" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+        <DataTemplate x:Key="sizeTemplate">
+            <TextBlock TextAlignment="Right" Text="{Binding length, StringFormat={}{0:N0} B}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="iconTemplate">
+            <Image Source="{Binding fileIcon}"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="24"/>
+        </Grid.RowDefinitions>
+        <ToolBarTray Grid.Row="0">
+            <ToolBar Band="1" BandIndex="1">
+                <Button Name="newButton" Click="newButton_Click" VerticalAlignment="Top">
+                    <StackPanel>
+                        <Image Source="images\document-new-3.png" Width="48"/>
+                        <TextBlock TextAlignment="Center">New</TextBlock>
+                    </StackPanel>
+                </Button>
+                <StackPanel>
+                    <Button Name="openButton" Click="openButton_Click" Padding="2,0" Style="{Binding ElementName=addButton,Path=Style}">
+                        <Image Source="images\document-open-7.png" Width="48"/>
+                    </Button>
+                    <Button Name="openButtonDropDown" BorderBrush="LightGray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="2,0" >
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="Click">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
+                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                                    </BooleanAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                </Style.Triggers>
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu>
+                                            <MenuItem Header="Open Vault...">
+                                                <MenuItem.Style>
+                                                    <Style TargetType="MenuItem">
+                                                        <EventSetter Event="Click" Handler="openButton_Click"/>
+                                                    </Style>
+                                                </MenuItem.Style>
+                                            </MenuItem>
+                                            <MenuItem Header="Open Vault with separate IV file...">
+                                                <MenuItem.Style>
+                                                    <Style TargetType="MenuItem">
+                                                        <EventSetter Event="Click" Handler="openSeparateIV_Click"/>
+                                                    </Style>
+                                                </MenuItem.Style>
+                                            </MenuItem>
+                                                      
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FFc2e0ff"/>
+                                                    <Setter Property="BorderBrush" Value="#FF3399ff"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Background" Value="#FFc2e0ff" />
+                                                    <Setter Property="BorderBrush" Value="#FF3399ff"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock TextAlignment="Center">Open...</TextBlock>
+                            <TextBlock FontFamily="Webdings" TextAlignment="Center">6</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Button Name="addButton" VerticalAlignment="Top" Click="addButton_Click">
+                    <StackPanel>
+                        <Image Source="images\dialog-more.png" Width="48"/>
+                        <TextBlock TextAlignment="Center">Add File(s)...</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Name="removeButton" VerticalAlignment="Top" Click="removeButton_Click">
+                    <StackPanel>
+                        <Image Source="images\dialog-fewer.png" Width="48"/>
+                        <TextBlock TextAlignment="Center">Remove File(s)</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Name="decryptButton" VerticalAlignment="Top" IsEnabled="False" Click="decryptButton_Click">
+                    <StackPanel>
+                        <Image Source="images\document-save-2.png" Width="48"/>
+                        <TextBlock TextAlignment="Center">Decrypt...</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Name="encryptButton" VerticalAlignment="Top" Click="encryptButton_Click">
+                    <StackPanel>
+                        <Image Source="images\document-encrypt-4.png" Width="48"/>
+                        <TextBlock TextAlignment="Center">Encrypt</TextBlock>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <ListView Grid.Row="1" Name="fileListView" Drop="fileListView_Drop" DragEnter="fileListView_DragEnter" AllowDrop="True" MouseDown="fileListView_MouseDown">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="32" CellTemplate="{StaticResource iconTemplate}" />
+                    <GridViewColumn Header="Filename" DisplayMemberBinding="{Binding filename}"  Width="{Binding ElementName=helperField, Path=ActualWidth}"/>
+                    <GridViewColumn Width="110" Header="Size" CellTemplate="{StaticResource sizeTemplate}" />
+                </GridView>
+            </ListView.View>
+ 
+        </ListView>
+        <Grid Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <!--Width is bound to width of the first GridViewColumn -->
+                <ColumnDefinition Width="32"/>
+                <!--Width is set to "Fill"-->
+                <ColumnDefinition Width="*"/>
+                <!--Correction Width-->
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <!--This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid-->
+            <Grid Grid.Column="1" x:Name="helperField"/>
+        </Grid>
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Name="statusText">Ready...</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
